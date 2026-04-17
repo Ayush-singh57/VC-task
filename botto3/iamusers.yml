@@ -1,0 +1,11 @@
+users:
+  - username: alice.dev
+    groups:
+      - Developers
+      - CloudArchitecture
+  - username: bob.ops
+    groups:
+      - SysAdmins
+  - username: charlie.intern
+    groups:
+      - ReadOnlyAccess

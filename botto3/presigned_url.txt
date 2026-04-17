@@ -1,0 +1,1 @@
+https://ayush-prod-bucket-57-xyz.s3.amazonaws.com/documents/localfile.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4FD7HKCLH3KYACMR%2F20260215%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20260215T190138Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=36c181ef6d5416cfa26e62809bb87016f0990a3a1a539bb6b21b110df11f5816

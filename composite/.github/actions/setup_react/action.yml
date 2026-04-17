@@ -1,0 +1,20 @@
+name: 'Setup React Environment'
+description: 'A custom shortcut to checkout code, install Node.js, and run npm ci'
+
+# This tells GitHub: "This is a sticky note, not a full pipeline!"
+runs:
+  using: "composite"
+  
+  steps:
+    # Step 2: Install Node
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    # Step 3: Install Packages
+    - name: Install Dependencies
+      run: npm ci
+      # GOLDEN RULE: Every 'run' command in a composite action MUST have this line!
+      shell: bash

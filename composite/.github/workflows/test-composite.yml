@@ -1,0 +1,19 @@
+name: Test Composite Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-my-shortcut:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # We trigger our custom "Sticky Note" by pointing directly to the folder we created!
+      - name: Use my custom Setup React shortcut
+        uses: ./.github/actions/setup-react
+
+      # Because the shortcut already got the code and installed npm, we can just build immediately!
+      - name: Build the App
+        run: npm run build

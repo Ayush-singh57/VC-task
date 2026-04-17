@@ -1,0 +1,26 @@
+name: Master Release Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  
+  deploy-to-staging:
+    name: Staging Release
+    uses: ./.github/workflows/reusable-deploy.yml
+    with:
+      environment-name: 'Staging'
+      s3-bucket: 'for-reusable-workflow'
+    secrets: inherit
+
+ 
+  deploy-to-prod:
+    name: Production Release
+    needs: deploy-to-staging 
+    uses: ./.github/workflows/reusable-deploy.yml
+    with:
+      environment-name: 'Production'
+      s3-bucket: 'my-ap-south-1-indore'
+    secrets: inherit

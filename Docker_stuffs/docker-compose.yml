@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # 1. THE FRONTEND (React served by Apache)
+  frontend:
+    build: ./LAMP_stack/my-app
+    container_name: react_frontend
+    restart: always
+    ports:
+      - "3000:80"
+
+  # 2. THE DATABASE (MySQL)
+  database:
+    image: mysql:8.0
+    container_name: mysql_database
+    restart: always
+    environment:
+      MYSQL_DATABASE: react_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

@@ -1,0 +1,18 @@
+{
+    "lambda_functions": [
+        {
+            "FunctionName": "AyushServerlessFunction",
+            "Runtime": "python3.12",
+            "MemorySizeMB": 128,
+            "TimeoutSeconds": 10,
+            "LastModified": "2026-02-28T11:28:20.000+0000"
+        },
+        {
+            "FunctionName": "GitHub-Slack-Alerts",
+            "Runtime": "python3.14",
+            "MemorySizeMB": 128,
+            "TimeoutSeconds": 3,
+            "LastModified": "2026-03-14T10:16:33.000+0000"
+        }
+    ]
+}
