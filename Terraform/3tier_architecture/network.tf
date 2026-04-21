@@ -1,73 +1,65 @@
-resource "aws_vpc" "main_vpc" {
+# 1. Create the VPC
+resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
-  tags = { Name = "TF-3Tier-VPC" }
+  tags = { Name = "virtuecloud-vpc" }
 }
 
-resource "aws_subnet" "web_public" {
-  vpc_id                  = aws_vpc.main_vpc.id
+# 2. Internet Gateway (Allows public subnets to reach the internet)
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+  tags = { Name = "virtuecloud-igw" }
+}
+
+# 3. Public Subnets (For Load Balancer & Web Servers)
+resource "aws_subnet" "public_1" {
+  vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
-  map_public_ip_on_launch = true
   availability_zone       = "ap-south-1a"
-  tags = { Name = "TF-Public-Web-Tier" }
+  map_public_ip_on_launch = true
+  tags = { Name = "Public-Subnet-1a" }
 }
 
-resource "aws_subnet" "app_private" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "ap-south-1a"
-  tags = { Name = "TF-Private-App-Tier" }
+resource "aws_subnet" "public_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "ap-south-1b"
+  map_public_ip_on_launch = true
+  tags = { Name = "Public-Subnet-1b" }
 }
 
-resource "aws_subnet" "db_private" {
-  vpc_id            = aws_vpc.main_vpc.id
+# 4. Private Subnet (For App Servers)
+resource "aws_subnet" "private_app" {
+  vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
   availability_zone = "ap-south-1a"
-  tags = { Name = "TF-Private-DB-Tier" }
+  tags = { Name = "Private-App-Subnet" }
 }
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main_vpc.id
-  tags = { Name = "TF-IGW" }
+# 5. Private Subnet (For Database)
+resource "aws_subnet" "private_db" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "ap-south-1b"
+  tags = { Name = "Private-DB-Subnet" }
 }
 
-resource "aws_eip" "nat_eip" {
-  domain = "vpc"
-}
-
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.web_public.id
-  tags = { Name = "TF-NAT" }
-}
-
+# 6. Route Table for Public Subnets
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = aws_vpc.main.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
 }
 
-resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.web_public.id
+resource "aws_route_table_association" "pub_assoc_1" {
+  subnet_id      = aws_subnet.public_1.id
   route_table_id = aws_route_table.public_rt.id
 }
 
-resource "aws_route_table" "private_rt" {
-  vpc_id = aws_vpc.main_vpc.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
-}
-  
-resource "aws_route_table_association" "app_assoc" {
-  subnet_id      = aws_subnet.app_private.id
-  route_table_id = aws_route_table.private_rt.id
-}
-
-resource "aws_route_table_association" "db_assoc" {
-  subnet_id      = aws_subnet.db_private.id
-  route_table_id = aws_route_table.private_rt.id
+resource "aws_route_table_association" "pub_assoc_2" {
+  subnet_id      = aws_subnet.public_2.id
+  route_table_id = aws_route_table.public_rt.id
 }
