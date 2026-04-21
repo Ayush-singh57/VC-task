@@ -18,10 +18,7 @@ variable "company_tags" {
   }
 }
 
-# --- 2. THE LOOP ---
-
 resource "aws_iam_user" "employees" {
-  # The Loop: "Count how many names are in the list, and run this block that many times"
   count = length(var.new_hires)
   
   # count.index is the current loop number (0, 1, 2)

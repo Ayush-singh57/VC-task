@@ -3,8 +3,8 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 
 # --- CONFIGURATION ---
-REGION = 'ap-south-1' # Mumbai
-BUCKET_NAME = 'ayush-final-scratch-2026-v2' # Changed slightly to ensure a fresh run
+REGION = 'ap-south-1'  
+BUCKET_NAME = 'ayush-final-scratch-2026-v2' 
 LOCAL_FILE = 'my_photo.png'
 S3_KEY = 'uploads/my_photo.png'
 
@@ -19,7 +19,6 @@ s3 = boto3.client('s3', config=s3_config)
 
 def run_full_s3_flow():
     try:
-        # --- CREATE BUCKET ---
         print(f"Creating bucket '{BUCKET_NAME}'...")
         s3.create_bucket(
             Bucket=BUCKET_NAME,
@@ -40,14 +39,6 @@ def run_full_s3_flow():
         response = s3.list_objects_v2(Bucket=BUCKET_NAME)
         for obj in response.get('Contents', []):
             print(f" - Found: {obj['Key']} ({obj['Size']} bytes)")
-
-        # --- GENERATE SECURE VIEW LINK ---
-        url = s3.generate_presigned_url(
-            'get_object',
-            Params={'Bucket': BUCKET_NAME, 'Key': S3_KEY},
-            ExpiresIn=3600 
-        )
-        print(f"\nSUCCESS! Click this link to view your image:\n{url}")
 
     except ClientError as e:
         print(f"AWS Error: {e.response['Error']['Message']}")

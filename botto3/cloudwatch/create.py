@@ -9,7 +9,6 @@ def setup_monitoring():
     cw = boto3.client('cloudwatch', region_name=REGION)
 
     try:
-        # 1. Create the SNS Topic
         topic_response = sns.create_topic(Name='EC2-Critical-Alerts')
         topic_arn = topic_response['TopicArn']
         print(f"Success: SNS Topic created. ARN: {topic_arn}")

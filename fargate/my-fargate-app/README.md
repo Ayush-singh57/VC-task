@@ -1,16 +1,23 @@
-# React + Vite
+# AWS Fargate Serverless Container Deployment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+This directory contains a containerized web application (`my-fargate-app`) configured for deployment on **AWS Fargate**, the serverless compute engine for Amazon Elastic Container Service (ECS). 
 
-Currently, two official plugins are available:
+Instead of provisioning and managing EC2 instances, this project utilizes Fargate to abstract the underlying infrastructure, allowing the application to scale dynamically based on container metrics while maintaining high security and availability.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🏗️ Architecture Flow
+1. **Containerization:** The application is packaged into a lightweight, isolated Docker container.
+2. **Registry:** The Docker image is pushed to an **Amazon Elastic Container Registry (ECR)** repository.
+3. **Task Definition:** An ECS Task Definition specifies the container image, required CPU/Memory, and port mappings.
+4. **Fargate Service:** An ECS Service runs the Task on the Fargate serverless cluster, placing it behind an **Application Load Balancer (ALB)** for public access and traffic distribution.
 
-## React Compiler
+## 🗂️ Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+📦 fargate/
+ ┣ 📂 my-fargate-app/
+ ┃ ┣ 📂 src/             # Source code (React/Node components)
+ ┃ ┣ 📂 public/          # Static assets
+ ┃ ┣ 📜 Dockerfile       # Instructions for building the container image
+ ┃ ┣ 📜 package.json     # Application dependencies
+ ┃ ┗ 📜 .dockerignore    # Files excluded from the build context

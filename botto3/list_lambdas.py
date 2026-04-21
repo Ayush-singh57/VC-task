@@ -1,8 +1,7 @@
 import boto3
 import json
 from datetime import datetime
-
-# 1. Custom Encoder to prevent the classic "datetime is not JSON serializable" crash
+ 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -26,7 +25,7 @@ def extract_lambda_inventory(output_filename='lambda_inventory.json'):
         for page in paginator.paginate():
             for func in page['Functions']:
                 
-                # 2. Extract ONLY the JSON fields we care about
+            
                 clean_function_data = {
                     "FunctionName": func.get('FunctionName'),
                     "Runtime": func.get('Runtime', 'N/A'),
@@ -43,11 +42,11 @@ def extract_lambda_inventory(output_filename='lambda_inventory.json'):
             json.dump(extracted_data, json_file, indent=4, cls=DateTimeEncoder)
             
         print("-" * 50)
-        print(f"✅ Success! Extracted {len(extracted_data['lambda_functions'])} functions.")
-        print(f"📁 Saved to: {output_filename}")
+        print(f" Extracted {len(extracted_data['lambda_functions'])} functions.")
+        print(f"Saved to: {output_filename}")
 
     except Exception as e:
-        print(f"❌ Error fetching Lambda functions: {e}")
+        print(f"Error fetching Lambda functions: {e}")
 
 if __name__ == "__main__":
     extract_lambda_inventory()

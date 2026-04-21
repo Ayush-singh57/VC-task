@@ -5,8 +5,6 @@ def launch_test_instance():
     
     print(" Launching EC2 Instance for CPU Test")
     
-    # This User Data script runs automatically when the server boots
-    # It updates the server and installs the 'stress' tool
     user_data_script = '''#!/bin/bash
     dnf update -y
     dnf install stress -y
@@ -14,7 +12,6 @@ def launch_test_instance():
     
     try:
         response = ec2.run_instances(
-            # This SSM parameter automatically finds the latest Amazon Linux 2023 Image
             ImageId='resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64',
             InstanceType='t3.micro', # Free-tier eligible
             MinCount=1,

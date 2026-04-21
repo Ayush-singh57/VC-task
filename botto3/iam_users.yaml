@@ -1,11 +1,11 @@
 users:
-  - username: alice.dev
+  - username: shivang
     groups:
       - Developers
       - CloudArchitecture
-  - username: bob.ops
+  - username: sujal
     groups:
       - SysAdmins
-  - username: charlie.intern
+  - username: rishabh.intern
     groups:
       - ReadOnlyAccess
